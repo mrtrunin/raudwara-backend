@@ -14,7 +14,7 @@ export class ChaptersService {
   }
 
   async findOne(id: string): Promise<Chapter> {
-    return await this.chapterModel.findOne({ _id: id });
+    return await this.chapterModel.findOne({ _id: id }).populate('sections');
   }
 
   async create(chapter: Chapter): Promise<Chapter> {

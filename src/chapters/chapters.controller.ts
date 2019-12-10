@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ChaptersService } from './chapters.service';
 import { Chapter } from './interfaces/chapter.interface';

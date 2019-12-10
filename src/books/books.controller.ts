@@ -27,6 +27,11 @@ export class BooksController {
     return this.booksService.findOne(id);
   }
 
+  @Get('/getBookByChapterId/:chapterId')
+  findBookByChapter(@Param('chapterId') chapterId): Promise<Book> {
+    return this.booksService.findBookByChapter(chapterId);
+  }
+
   @UseGuards(AuthGuard('jwt'))
   @Post()
   create(@Body() createBookDto: CreateBookDto): Promise<Book> {
