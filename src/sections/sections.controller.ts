@@ -7,11 +7,16 @@ import {
   Body,
   Param,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Res,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateSectionDto } from './dto/create-section.dto';
 import { Section } from './interfaces/section.interface';
 import { SectionsService } from './sections.service';
 import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
 
 @Controller('sections')
 export class SectionsController {
@@ -31,6 +36,14 @@ export class SectionsController {
   @Post()
   create(@Body() createSectionDto: CreateSectionDto): Promise<Section> {
     return this.sectionsService.create(createSectionDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file, @Res() res: Response) {
+    const result = await this.sectionsService.uploadImage(file);
+    await res.status(200).send(result);
   }
 
   @UseGuards(AuthGuard('jwt'))

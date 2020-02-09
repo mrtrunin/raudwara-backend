@@ -7,9 +7,8 @@ import { ChaptersModule } from './chapters/chapters.module';
 import { BooksModule } from './books/books.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { ConfigModule } from './config/config.module';
+import { ConfigModule } from '@nestjs/config';
 import config from './config/keys';
-import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -19,7 +18,9 @@ import { APP_PIPE } from '@nestjs/core';
     BooksModule,
     AuthModule,
     UsersModule,
-    ConfigModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

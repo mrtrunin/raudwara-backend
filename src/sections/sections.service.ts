@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Section } from './interfaces/section.interface';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { format } from 'util';
+import { Storage } from '@google-cloud/storage';
 
 @Injectable()
 export class SectionsService {
@@ -31,4 +33,27 @@ export class SectionsService {
       new: true,
     });
   }
+
+  uploadImage = file =>
+    new Promise((resolve, reject) => {
+      const storage = new Storage();
+      const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+      const { originalname, buffer } = file;
+
+      const blob = bucket.file(originalname.replace(/ /g, '_'));
+      const blobStream = blob.createWriteStream({
+        resumable: false,
+      });
+      blobStream
+        .on('finish', () => {
+          const publicUrl = format(
+            `https://storage.googleapis.com/${bucket.name}/${blob.name}`,
+          );
+          resolve(publicUrl);
+        })
+        .on('error', () => {
+          reject(`Unable to upload image, something went wrong`);
+        })
+        .end(buffer);
+    });
 }
