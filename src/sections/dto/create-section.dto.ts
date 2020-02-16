@@ -2,7 +2,7 @@ export class CreateSectionDto {
   readonly type: string;
   readonly title?: string;
   readonly content?: string;
-  readonly filename?: string;
+  readonly url?: string;
   readonly alt?: string;
 }
 

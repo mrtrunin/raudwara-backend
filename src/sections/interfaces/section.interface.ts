@@ -3,6 +3,6 @@ export interface Section {
   type: string;
   title?: string;
   content?: string;
-  filename?: string;
+  url?: string;
   alt?: string;
 }

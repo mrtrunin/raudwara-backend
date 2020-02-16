@@ -34,11 +34,13 @@ export class SectionsService {
     });
   }
 
-  uploadImage = file =>
+  uploadImage = (file: any) =>
     new Promise((resolve, reject) => {
       const storage = new Storage();
       const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
       const { originalname, buffer } = file;
+
+      // TODO: Validate that this is just an image
 
       const blob = bucket.file(originalname.replace(/ /g, '_'));
       const blobStream = blob.createWriteStream({
@@ -46,7 +48,7 @@ export class SectionsService {
       });
       blobStream
         .on('finish', () => {
-          const publicUrl = format(
+          const publicUrl: string = format(
             `https://storage.googleapis.com/${bucket.name}/${blob.name}`,
           );
           resolve(publicUrl);

@@ -41,9 +41,13 @@ export class SectionsController {
   @UseGuards(AuthGuard('jwt'))
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file, @Res() res: Response) {
+  async uploadFile(@UploadedFile() file): Promise<Section> {
     const result = await this.sectionsService.uploadImage(file);
-    await res.status(200).send(result);
+    const createSectionDto: CreateSectionDto = {
+      type: 'image',
+      url: result.toString(),
+    };
+    return await this.sectionsService.create(createSectionDto);
   }
 
   @UseGuards(AuthGuard('jwt'))
