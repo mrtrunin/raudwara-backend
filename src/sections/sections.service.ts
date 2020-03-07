@@ -45,11 +45,14 @@ export class SectionsService {
       const blob = bucket.file(originalname.replace(/ /g, '_'));
       const blobStream = blob.createWriteStream({
         resumable: false,
+        metadata: {
+          contentType: file.mimetype,
+        },
       });
       blobStream
         .on('finish', () => {
           const publicUrl: string = format(
-            `https://storage.googleapis.com/${bucket.name}/${blob.name}`,
+            `https://storage.cloud.google.com/${bucket.name}/${blob.name}`,
           );
           resolve(publicUrl);
         })
